@@ -8,30 +8,34 @@ const getList = (author, keyword) => {
     sql += `and title like '%${keyword}%' `
   }
   sql += `order by createtime desc;`
-  
+
   // 返回 promise
   return exec(sql)
 }
 
 const getDetail = (id) => {
-  // 先返回假数据
-  return {
-    id: 1,
-    title: 'titleA',
-    content: 'contentA',
-    createTime: 1640347831602,
-    author: 'hyde'
-  }
+  const sql = `select * from blogs where id='${id}'`
+  return exec(sql).then(rows => {
+    return rows[0]
+  })
 }
 
 const newBlog = (blogData = {}) => {
   // blogData 是一个博客对象， 包含title content属性
-  console.log('newBlog...', blogData)
+  const title = blogData.title
+  const content = blogData.content
+  const author = blogData.author
+  const createtime = Date.now()
 
-  return {
-    id: 3 // 表示新建博客， 插入到数据表里面 id
-  }
-
+  const sql = `
+    inster into blogs (title, content, createtime, author)
+    values ('${title}', '${content}', ${createtime}, '${author}');
+  `
+  return exec(sql).then(insertData => {
+    return {
+      id: insertData.insertId
+    }
+  })
 }
 
 const updateBlog = (id, blogData) => {
