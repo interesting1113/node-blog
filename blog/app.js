@@ -3,6 +3,12 @@ const querystring = require('querystring')
 const handleBlogRouter = require('./src/router/blog')
 const handleUserRouter = require('./src/router/user')
 
+// 获取 cookie 的过期时间
+const ookieExpires = () => {
+  const d = new Date()
+  d.setTime(d.getTime() + (24 * 60 * 60 * 1000))
+  return d.toGMTString()
+}
 
 // session 数据
 const SESSION_DATA = {}
@@ -60,8 +66,8 @@ const serverHandle = (req, res) => {
   })
 
   // 解析 session
-  const needSetCookie = false
-  const userId = req.cookie.userId
+  let needSetCookie = false
+  let userId = req.cookie.userId
   if (userId) {
     if (!SESSION_DATA[userId]) {
       SESSION_DATA[userId] = {}
