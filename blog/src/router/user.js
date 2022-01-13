@@ -10,6 +10,7 @@ const handleUserRouter = (req, res) => {
   // 登陆
   if (method === 'POST' && req.path  === '/api/user/login') {
     const { username, password } = req.body
+    // const { username, password } = req.query
     const result = login(username, password)
     return result.then(data => {
       if (data.username) {
@@ -24,15 +25,15 @@ const handleUserRouter = (req, res) => {
     })
   }
 
-  // 登陆验证的测试
-  if (method === 'GET' && req.path === 'api/user/login-test') {
-    if (req.session.username) {
-      return new Promise.resolve(SuccessModel({
-        username: req.session.username
-      }))
-    }
-    return new ErrorModel('尚未登陆')
-  }
+  // // 登陆验证的测试
+  // if (method === 'GET' && req.path === 'api/user/login-test') {
+  //   if (req.session.username) {
+  //     return new Promise.resolve(SuccessModel({
+  //       username: req.session.username
+  //     }))
+  //   }
+  //   return new ErrorModel('尚未登陆')
+  // }
 } 
 
 module.exports = handleUserRouter
