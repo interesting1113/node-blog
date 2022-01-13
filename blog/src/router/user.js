@@ -1,12 +1,6 @@
 const { login } = require('../controller/user')
 const { SuccessModel, ErrorModel } = require('../model/resModel')
-
-// 获取 cookie 的过期时间
-const ookieExpires = () => {
-  const d = new Date()
-  d.setTime(d.getTime() + (24 * 60 * 60 * 1000))
-  return d.toGMTString()
-}
+const { set } = require('../db/redis')
 
 const handleUserRouter = (req, res) => {
   const method = req.method // GET POST
@@ -22,6 +16,8 @@ const handleUserRouter = (req, res) => {
         // 设置 session
         req.session.username = data.username
         req.session.realname = data.realname
+        // 同步到 redis 中
+        set(req.sessionId, req.session)
         return new SuccessModel()
       }
       return new ErrorModel('登陆失败')
