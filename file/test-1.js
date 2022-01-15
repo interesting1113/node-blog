@@ -24,3 +24,8 @@ fs.writeFile(fileName, content, opt, (err) => {
     return
   }
 })
+
+// 判断文件是否存在
+fs.exists(fileName, (exist) => {
+  console.log('exist', exist)
+})
